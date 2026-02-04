@@ -3,6 +3,11 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import connectDB from './config/db.js';
+import userRouter from './routes/userRoutes.js';
+import notFound from './middleware/notFound.js';
+import handleError from './middleware/handleError.js';
+
 
 dotenv.config();
 
@@ -43,6 +48,14 @@ app.get("/", (req, res)=>{
     res.send("Hello World");
 })
 
+
+connectDB();
+
+app.use("/api", userRouter);
+
+
+app.use(notFound);
+app.use(handleError);
 app.listen(PORT, ()=>{
     console.log(`Listening on PORT ${PORT}`);
 })
